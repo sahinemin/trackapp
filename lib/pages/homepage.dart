@@ -22,11 +22,15 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () async {
           Provider.of<Auth>(context, listen: false).logOut().then((_) {
-            Provider.of<LocationProvider>(context, listen: false)
-                .endStream()
-                .then((_) {
+            if (Provider.of<Auth>(context, listen: false).isAdmin) {
               SystemNavigator.pop();
-            });
+            } else {
+              Provider.of<LocationProvider>(context, listen: false)
+                  .endStream()
+                  .then((_) {
+                SystemNavigator.pop();
+              });
+            }
           });
         },
         child: const Icon(Icons.logout),
