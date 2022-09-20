@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackapp/pages/homepage.dart';
+import '../pages/user_location.dart';
 import '../providers/authentication.dart';
 
 class AdminWidget extends StatelessWidget {
   const AdminWidget({super.key});
-  void _navigate(BuildContext context) {
-    Navigator.of(context).pushNamed(HomePage.routeName);
+  void _navigate(BuildContext context, Map<String, dynamic> info) {
+    Navigator.of(context).pushNamed(UserLocation.routeName, arguments: info);
   }
 
   @override
@@ -35,7 +35,8 @@ class AdminWidget extends StatelessWidget {
                         color: Colors.white,
                         elevation: 6,
                         child: InkWell(
-                          onTap: () => _navigate(context),
+                          onTap: () =>
+                              _navigate(context, snapshot.data![index]),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             title: Text(snapshot.data![index]['email']),

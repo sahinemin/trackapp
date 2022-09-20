@@ -46,9 +46,10 @@ class LocationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchLocations() async {
+  Future<List> fetchLocations(String userLocId) async {
     _locationDatas.clear();
-    final Uri url = Uri.parse('$baseUrl$userId/positions.json?auth=$authToken');
+    final Uri url =
+        Uri.parse('$baseUrl$userLocId/positions.json?auth=$authToken');
     //_locationDatas.add(locationData);
     final http.Response response = await http.get(url);
     final Map<String, dynamic> extractedData = jsonDecode(response.body);
@@ -56,5 +57,19 @@ class LocationProvider with ChangeNotifier {
       _locationDatas.add(LocationData.fromJson(locData));
     });
     notifyListeners();
+    return await getLocationSnap(_locationDatas);
+  }
+
+  Future<List> getLocationSnap(List<LocationData> locDatas) async {
+    String path = "";
+    for (var element in locDatas) {
+      path += "${element.position.latitude},${element.position.longitude}|";
+    }
+    path = path.substring(0, path.length - 1);
+    final Uri url = Uri.parse(
+        'https://roads.googleapis.com/v1/snapToRoads?interpolate=true&path=$path&key=AIzaSyCxoClFWl5kra_EYTp3mXHQouZQl9xrN_w');
+    final http.Response response = await http.get(url);
+    final Map<String, dynamic> extractedData = jsonDecode(response.body);
+    return extractedData['snappedPoints'];
   }
 }

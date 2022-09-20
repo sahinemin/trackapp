@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackapp/pages/splash_screen.dart';
+import 'package:trackapp/pages/user_location.dart';
 import 'package:trackapp/providers/authentication.dart';
 import 'providers/location_provider.dart';
 import 'pages/homepage.dart';
@@ -114,7 +115,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         HomePage.routeName: (_) => const HomePage(),
-        AuthScreen.routeName: (_) => const AuthScreen()
+        AuthScreen.routeName: (_) => const AuthScreen(),
+        UserLocation.routeName: (_) => const UserLocation()
       },
     );
   }
