@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackapp/pages/splash_screen.dart';
 import 'package:trackapp/providers/authentication.dart';
 import 'providers/location_provider.dart';
 import 'pages/homepage.dart';
@@ -68,6 +69,7 @@ void main() {
           true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );*/
   //Workmanager().registerOneOffTask("task-identifier", "simpleTask");
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => Auth()),
     ChangeNotifierProxyProvider<Auth, LocationProvider>(
@@ -93,7 +95,23 @@ class MyApp extends StatelessWidget {
           error: Colors.red,
         ),
       ),
-      home: const AuthScreen(),
+      home: FutureBuilder<bool>(
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return const Text("Error");
+            } else if (snapshot.hasData) {
+              if (snapshot.data!) {
+                return const HomePage();
+              } else {
+                return const AuthScreen();
+              }
+            }
+          }
+          return const SplashScreen();
+        },
+        future: Provider.of<Auth>(context, listen: false).tryAutoLogin(),
+      ),
       routes: {
         HomePage.routeName: (_) => const HomePage(),
         AuthScreen.routeName: (_) => const AuthScreen()
