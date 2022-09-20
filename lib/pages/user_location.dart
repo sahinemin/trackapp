@@ -1,9 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:trackapp/models/location_data.dart';
 import 'package:trackapp/providers/location_provider.dart';
 
 class UserLocation extends StatelessWidget {
